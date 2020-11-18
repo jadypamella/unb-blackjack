@@ -1,7 +1,5 @@
-import random
 import pandas as pd
-
-from data.arquivo import Arquivo
+from data.file import File
 
 # classe para sugestoes tradicionais
 class AgenteTradicional():
@@ -9,18 +7,26 @@ class AgenteTradicional():
     def __init__(self, player, dealer):
         self.name = "Tradicional"
         self.nickname = "trad"
-        self.data_file = "tradicional.csv"
+        self.filename = "tradicional.csv"
 
         #print("Jogador: \n"+player.dataframe.to_string()+"\n")
-        print(self.get_data())
+        self.get_data()
+
+       # data = pd.read_csv(self.data_file)
+        #data = pd.read_csv(self.data_file)
+        #print(data)
 
     def agent_suggestion(self):
-        suggestion_list = ['Hit', 'Stand']
-        suggestion = random.choice(suggestion_list)
-        return suggestion
+        #suggestion_list = ['Hit', 'Stand']
+        #suggestion = random.choice(suggestion_list)
+        #return suggestion
+        pass
 
     def get_data(self):
-        arquivo = Arquivo(self.data_file)
-        data_json = arquivo.getCSVasJSON()
-        df = pd.read_json(data_json) # converte json para pandas dataframe
+        file = File(self.filename)
+        #arquivo.fileInfo()
+        
+        df = file.getCSVasDataframe()
+        print(df)
         return df
+        
