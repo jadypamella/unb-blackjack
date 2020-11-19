@@ -2,7 +2,7 @@ import os, csv, json, pandas as pd
 from pathlib import Path
 
 """
-Classe com as funções para manipulação de arquivos
+Classe com as funcoes para maipulacao de arquivos
 """
 
 class File:

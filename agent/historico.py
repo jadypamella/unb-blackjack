@@ -1,6 +1,9 @@
 import random
 
-# classe para sugestoes historicas
+"""
+Classe com as funcoes para sugestoes historicas
+"""
+
 class AgenteHistorico():
 
     def __init__(self):

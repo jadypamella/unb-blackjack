@@ -1,32 +1,52 @@
 import pandas as pd
 from data.file import File
 
-# classe para sugestoes tradicionais
+"""
+Classe com as funcoes para sugestoes tradicionais
+"""
+
 class AgenteTradicional():
 
     def __init__(self, player, dealer):
         self.name = "Tradicional"
         self.nickname = "trad"
         self.filename = "tradicional.csv"
-
-        #print("Jogador: \n"+player.dataframe.to_string()+"\n")
-        self.get_data()
-
-       # data = pd.read_csv(self.data_file)
-        #data = pd.read_csv(self.data_file)
-        #print(data)
-
-    def agent_suggestion(self):
-        #suggestion_list = ['Hit', 'Stand']
-        #suggestion = random.choice(suggestion_list)
-        #return suggestion
-        pass
+        self.player = player
+        self.dealer = dealer
 
     def get_data(self):
         file = File(self.filename)
-        #arquivo.fileInfo()
+        return file.getCSVasDataframe()
         
-        df = file.getCSVasDataframe()
-        print(df)
-        return df
+    def agent_suggestion(self):
+        
+        # Definindo a coluna do player 
+        player_hand_value = self.player.cardsum
+        player_has_ace = self.player.has_ace
+
+        player_column = '0A'+str(player_hand_value)
+        if player_has_ace:
+            player_column = '1A'+str(player_hand_value-11)
+        
+        # Definindo a coluna do dealer
+        dealer_hand_value = self.dealer.cardsum
+        dealer_has_ace = self.dealer.has_ace
+
+        dealer_column = '0A'+str(dealer_hand_value)
+        if dealer_has_ace:
+            dealer_column = '1A0'
+
+        # Resgatando o padrao da planilha tradicional de sugestao de acoes 
+        data = self.get_data()
+        data = data.set_index('States')
+
+        data_value = data.loc[player_column, dealer_column] # localizando o valor do dataframe
+
+        # Retornando a sugestao do agente
+        if(data_value == 1):
+            suggestion = 'Hit'
+        else:
+            suggestion = 'Stand'
+        
+        return suggestion
         

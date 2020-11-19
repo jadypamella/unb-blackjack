@@ -1,6 +1,9 @@
 import random
 
-# classe para sugestoes aleatorias
+"""
+Classe com as funcoes para sugestoes aleatorias
+"""
+
 class AgenteAleatorio():
 
     def __init__(self):

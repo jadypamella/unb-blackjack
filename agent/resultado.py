@@ -1,6 +1,9 @@
 import random
 
-# classe para avaliacao do resultado dos agentes analiticos
+"""
+Classe com as funcoes para avaliacao do resultado dos agentes analiticos
+"""
+
 class AgenteResultado():
 
     def __init__(self):

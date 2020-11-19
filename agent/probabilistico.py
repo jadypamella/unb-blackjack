@@ -1,6 +1,9 @@
 import random
 
-# classe para sugestoes probabilisticas
+"""
+Classe com as funcoes para sugestoes probabilisticas
+"""
+
 class AgenteProbabilistico():
 
     def __init__(self):

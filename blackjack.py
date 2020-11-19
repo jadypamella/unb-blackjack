@@ -43,6 +43,8 @@ aaleawinloss
 class Player():
 
     def __init__(self, card1, card2, card3, card4, card5):
+        self.has_ace = False
+        self.busted = False
         self.card1 = self.card_value(card1)
         self.card2 = self.card_value(card2)
         self.card3 = self.card_value(card3)
@@ -54,8 +56,8 @@ class Player():
         self.cardrank4 = card4
         self.cardrank5 = card5
         self.dataframe = self.card_dataframe()
-        self.sum = self.cards_sum()
-    
+        self.cardsum = self.card_sum()
+
     def card_dataframe(self):
         cardrank = [self.cardrank1, self.cardrank2, self.cardrank3, self.cardrank4, self.cardrank5]
         cardvalue = [self.card1, self.card2, self.card3, self.card4, self.card5]
@@ -65,15 +67,20 @@ class Player():
         return df
 
     def card_value(self, card):
-        if card == 'A':
+        if card == 'A' or card == 11:
+            self.has_ace = True
             return 11
         elif card == 'T' or card == 'J' or card == 'Q' or card == 'K':
             return 10
         else:
             return card
 
-    def cards_sum(self):
+    def card_sum(self):
         cardssum = self.card1 + self.card2 + self.card3 + self.card4 + self.card5
+
+        if cardssum > 21:
+            self.busted = True
+
         return cardssum
 
 # classe dos baralhos
@@ -146,22 +153,23 @@ class Blackjack():
         #print("Jogador: \n"+player.dataframe.to_string()+"\n")
         #print("Dealer: \n"+dealer.dataframe.to_string()+"\n")
 
-        # sugestoes dos agentes
-        #agente_aleatorio = AgenteAleatorio()
-        #print("Agente Aleatório: "+agente_aleatorio.agent_suggestion())
+        if(player.busted == False): # se o jogador nao tiver estourado a pontuacao
+            # sugestoes dos agentes
+            agente_aleatorio = AgenteAleatorio()
+            print("Agente Aleatório: "+agente_aleatorio.agent_suggestion())
 
-        agente_tradicional = AgenteTradicional(player, dealer)
-        #print("Agente Tradicional: "+agente_tradicional.agent_suggestion())
+            agente_tradicional = AgenteTradicional(player, dealer)
+            print("Agente Tradicional: "+agente_tradicional.agent_suggestion())
 
-        #agente_historico = AgenteHistorico()
-        #print("Agente Histórico: "+agente_historico.agent_suggestion())
+            #agente_historico = AgenteHistorico()
+            #print("Agente Histórico: "+agente_historico.agent_suggestion())
 
-        #agente_probabilistico = AgenteProbabilistico()
-        #print("Agente Probabilístico: "+agente_probabilistico.agent_suggestion())
+            #agente_probabilistico = AgenteProbabilistico()
+            #print("Agente Probabilístico: "+agente_probabilistico.agent_suggestion())
 
-        # resultados dos agentes
-        #agente_resultado = AgenteResultado()
-        #print("Agente Resultado: ")
+            # resultados dos agentes
+            #agente_resultado = AgenteResultado()
+            #print("Agente Resultado: ")
 
     #def calcular_probabilidade():
     #    
