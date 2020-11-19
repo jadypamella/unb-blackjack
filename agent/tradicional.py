@@ -40,13 +40,18 @@ class AgenteTradicional():
         data = self.get_data()
         data = data.set_index('States')
 
-        data_value = data.loc[player_column, dealer_column] # localizando o valor do dataframe
+        suggestion = 'Error'
+        try: # localizando o valor do dataframe
+            data_value = data.loc[player_column, dealer_column] 
 
-        # Retornando a sugestao do agente
-        if(data_value == 1):
-            suggestion = 'Hit'
-        else:
-            suggestion = 'Stand'
-        
+            # Retornando a sugestao do agente
+            if(data_value == 1):
+                suggestion = 'Hit'
+            else:
+                suggestion = 'Stand'
+
+        except Exception as e:
+            print ('Chave '+str(e)+' não encontrada na tabela de sugestões do agente tradicional.')
+             
         return suggestion
         
