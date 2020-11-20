@@ -155,18 +155,19 @@ class Blackjack():
 
         if(player.busted == False): # se o jogador nao tiver estourado a pontuacao
             # sugestoes dos agentes
+            
             agente_aleatorio = AgenteAleatorio()
             print("Agente Aleatório: "+agente_aleatorio.agent_suggestion())
 
             agente_tradicional = AgenteTradicional(player, dealer)
             print("Agente Tradicional: "+agente_tradicional.agent_suggestion())
 
-            #agente_historico = AgenteHistorico()
-            #print("Agente Histórico: "+agente_historico.agent_suggestion())
+            agente_historico = AgenteHistorico(player, dealer)
+            print("Agente Histórico: "+agente_historico.agent_suggestion())
 
-            #agente_probabilistico = AgenteProbabilistico()
+            #agente_probabilistico = AgenteProbabilistico(player, dealer, deck)
             #print("Agente Probabilístico: "+agente_probabilistico.agent_suggestion())
-
+            
             # resultados dos agentes
             #agente_resultado = AgenteResultado()
             #print("Agente Resultado: ")
