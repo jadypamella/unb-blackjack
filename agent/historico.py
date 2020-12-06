@@ -14,7 +14,7 @@ class AgenteHistorico():
         self.player = player
         self.dealer = dealer
 
-        self.agent_suggestion()
+        self.suggestion = self.agent_suggestion()
 
     def get_data(self):
         file = File(self.filename)
@@ -34,6 +34,8 @@ class AgenteHistorico():
         data = self.get_data()
 
         suggestion = 'Error'
+        count_loss = 0
+        count_win = 0
         try: # localizando o valor do dataframe
         
             data_parameters = (data[player_column] == player_hand_value)# & (data[dealer_column] == dealer_hand_value)

@@ -88,3 +88,10 @@ class File:
             with open(self.filename, "w+", encoding=self.encoding) as json_file:
                 json.dump(json_data, json_file)
                 json_file.close()
+
+    # Salva os dados de um Dataframe como arquivo CSV
+    def setDataframeasCSV(self, data, delimiter=","):
+        if self.checkFile():
+
+            df = data
+            df.to_csv(self.filename, index=False, line_terminator="\n", sep=delimiter)

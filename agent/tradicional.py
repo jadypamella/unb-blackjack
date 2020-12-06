@@ -14,6 +14,8 @@ class AgenteTradicional():
         self.player = player
         self.dealer = dealer
 
+        self.suggestion = self.agent_suggestion()
+
     def get_data(self):
         file = File(self.filename)
         return file.getCSVasDataframe()

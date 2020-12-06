@@ -13,57 +13,78 @@ class AgenteProbabilistico():
         self.dealer = dealer
         self.deck = deck
 
-    # Factorial of a positive integer n, denoted by n! is the product of all positive integers less than or equal to n
-    def factorial(n):
-        if n == 1: 
-            return 1
-        else:
-            return n * factorial(n - 1)
+        self.suggestion = self.agent_suggestion()
+        #self.probability_info()
 
-    # A combination is a selection of items from a collection, such that (unlike permutations) the order of selection does not matter
-    # This function is withou repetition 
-    def combination(n, r):
-        return (factorial(n) / (factorial(r) * (factorial(n - r))))
-
-    def probability_info():
+    def probability_info(self):
 
         # Probability of obtaining a natural blackjack
         # Outs = (4A + 410) * deck
-        ...
-        
+        #print(self.deck.dataframe)
+        #print(self.deck.cards_total)
+        #print(self.deck.cards_total_available)
+
+        #self.player.card1 
+        #self.player.card2
+        #self.player.card3
+        #self.player.card4 
+        #self.player.card5
+        #self.player.dataframe
+        #self.player.cardsum 
+
+        pass
+
+    def probability_blackjack(self):
+        pass
+
+    def probability_bust(self):
+        pass
+
+    def probability_win_stand(self):    
+        return 25
+
+    def probability_lose_stand(self):      
+        return 10
+
+    def probability_win_hit(self):      
+        return 20
+
+    def probability_lose_hit(self):       
+        return 10
+
     def agent_suggestion(self):
-        
-        # Definindo a coluna do player 
-        player_hand_value = self.player.cardsum
-        player_has_ace = self.player.has_ace
 
-        player_column = '0A'+str(player_hand_value)
-        if player_has_ace:
-            player_column = '1A'+str(player_hand_value-11)
-        
-        # Definindo a coluna do dealer
-        dealer_hand_value = self.dealer.cardsum
-        dealer_has_ace = self.dealer.has_ace
-
-        dealer_column = '0A'+str(dealer_hand_value)
-        if dealer_has_ace:
-            dealer_column = '1A0'
-
-        # Resgatando o padrao da planilha tradicional de sugestao de acoes 
-        data = self.get_data()
-        data = data.set_index('States')
+        '''
+        - Pws: a probabilidade do jogador ganhar (win) a partida caso permaneça com a
+        pontuação atual (stand);
+        - Pls: a probabilidade do jogador perder (lose) a partida caso permaneça com a
+        pontuação atual (stand);
+        - Pwh: a probabilidade do jogador ganhar (win) a partida caso peça mais uma carta
+        (hit);
+        - Plh: a probabilidade do jogador perder (lose) a partida caso peça mais uma carta
+        (hit);
+        Temos que, caso a Pws - Pls seja maior que a Pwh - Plh, o agente deve sugerir a
+        ação Stand, caso contrário, deve sugerir a ação Hit.
+        '''
 
         suggestion = 'Error'
-        try: # localizando o valor do dataframe
-            data_value = data.loc[player_column, dealer_column] 
+        try: # calculando a probabilidade
+            
+            pws = self.probability_win_stand()
+            pls = self.probability_lose_stand()
+            pwh = self.probability_win_hit()
+            phs = self.probability_lose_hit()
+
+            ps = pws - pls # probabilidade stand
+            ph = pwh - phs # probabilidade hit
 
             # Retornando a sugestao do agente
-            if(data_value == 1):
+            if(ph >= ps):
                 suggestion = 'Hit'
             else:
                 suggestion = 'Stand'
 
         except Exception as e:
-            print ('Chave '+str(e)+' não encontrada na tabela de sugestões do agente tradicional.')
+            print(e)
              
         return suggestion
