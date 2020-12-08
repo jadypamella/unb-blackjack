@@ -35,7 +35,7 @@ class AgenteTradicional():
         dealer_has_ace = self.dealer.has_ace
 
         dealer_column = '0A'+str(dealer_hand_value)
-        if dealer_has_ace:
+        if dealer_has_ace or dealer_column == '0A1':
             dealer_column = '1A0'
 
         # Resgatando o padrao da planilha tradicional de sugestao de acoes 

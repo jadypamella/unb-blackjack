@@ -42,6 +42,8 @@ class Console():
         self.dcard1 = input('Digite a carta revelada do Dealer: ')
         self.qdecks = input('Digite a quantidade de baralhos: ')
         self.blackjack = Blackjack(self.pcard1, self.pcard2, self.pcard3, self.pcard4, self.pcard5, self.dcard1, self.dcard2, self.dcard3, self.dcard4, self.dcard5, self.qdecks)
+
+        self.main()
         self.escolher_sugestao()
 
     def proxima_acao(self):
@@ -64,7 +66,10 @@ class Console():
 
     def escolher_sugestao(self):
         self.main()
+        self.blackjack.get_info()
+        self.blackjack.get_suggestions()
 
+        print("****************************")
         print('Informe a sugestão escolhida:')
         print('1 - Hit')
         print('2 - Stand')
@@ -73,7 +78,7 @@ class Console():
         if (self.blackjack.player.busted == False and self.blackjack.dealer.busted == False):
             if (self.sugestao_escolhida == 'hit' or self.sugestao_escolhida == 'Hit' or self.sugestao_escolhida == '1'):
                 self.informar_nova_carta_jogador()
-                self.proxima_acao()
+                #self.proxima_acao()
 
             elif (self.sugestao_escolhida == 'stand' or self.sugestao_escolhida == 'Stand' or self.sugestao_escolhida == '2'):
                 self.informar_resultado()
