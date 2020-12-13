@@ -10,35 +10,51 @@ from sys import argv
 
 import random
 
-class CompRequest(FipaRequestProtocol):
-    """FIPA Request Behaviour of the analytic agent"""
-    def __init__(self, agent):
-        super(CompRequest, self).__init__(agent=agent,
-                                          message=None,
-                                          is_initiator=False)
-
-    def handle_request(self, message):
-        super(CompRequest, self).handle_request(message)
-        display_message(self.agent.aid.localname, 'request message received')
-        
-        suggestion_list = ['Hit', 'Stand']
-        suggestion = random.choice(suggestion_list)
-
-        reply = message.create_reply()
-        reply.set_performative(ACLMessage.INFORM)
-        reply.set_content(str(suggestion))
-        self.agent.send(reply)
-
-
-class CompRequest2(FipaRequestProtocol):
-    """FIPA Request Behaviour of the interface agent"""
+class CompRequestInterface(FipaRequestProtocol):
+    """FIPA Request Behaviour of the Interface Agent"""
     def __init__(self, agent, message):
-        super(CompRequest2, self).__init__(agent=agent,
+        super(CompRequestInterface, self).__init__(agent=agent,
                                            message=message,
                                            is_initiator=True)
 
     def handle_inform(self, message):
         display_message(self.agent.aid.localname, message.content)
+
+class CompRequestAnalyticAgent(FipaRequestProtocol):
+    """FIPA Request Behaviour of the Analytic Agent"""
+    def __init__(self, agent):
+        super(CompRequestAnalyticAgent, self).__init__(agent=agent,
+                                          message=None,
+                                          is_initiator=False)
+
+    def handle_request(self, message):
+        super(CompRequestAnalyticAgent, self).handle_request(message)
+        display_message(self.agent.aid.localname, 'suggestion message received from interface.')
+
+        suggestion_list = ['Hit', 'Stand']
+        suggestion = random.choice(suggestion_list)
+ 
+        reply = message.create_reply()
+        reply.set_performative(ACLMessage.INFORM)
+        reply.set_content(suggestion)
+        self.agent.send(reply)
+
+class CompRequestResultAgent(FipaRequestProtocol):
+    """FIPA Request Behaviour of the Result Agent"""
+    def __init__(self, agent):
+        super(CompRequestResultAgent, self).__init__(agent=agent,
+                                          message=None,
+                                          is_initiator=False)
+
+    def handle_request(self, message):
+        super(CompRequestResultAgent, self).handle_request(message)
+        display_message(self.agent.aid.localname, 'results analysis message received from interface.')
+ 
+        result = "Análise de Resultados"
+        reply = message.create_reply()
+        reply.set_performative(ACLMessage.INFORM)
+        reply.set_content(result)
+        self.agent.send(reply)
 
 
 class ComportTemporal(TimedBehaviour):
@@ -53,8 +69,8 @@ class ComportTemporal(TimedBehaviour):
 
 
 class InterfaceAgent(Agent):
-    """Class thet defines the interface agent."""
-    def __init__(self, aid, tradicional_agent_name, probabilistico_agent_name, historico_agent_name):
+    """Class thet defines the Interface agent."""
+    def __init__(self, aid, tradicional_agent_name, probabilistico_agent_name, historico_agent_name, resultado_agent):
         super(InterfaceAgent, self).__init__(aid=aid, debug=False)
 
         # message that requests suggestion to tradicional agent
@@ -63,9 +79,8 @@ class InterfaceAgent(Agent):
         message.add_receiver(AID(name=tradicional_agent_name))
         message.set_content('Sugestão')
 
-        self.comport_request = CompRequest2(self, message)
+        self.comport_request = CompRequestInterface(self, message)
         self.comport_temp = ComportTemporal(self, 8.0, message)
-
         self.behaviours.append(self.comport_request)
         self.behaviours.append(self.comport_temp)
 
@@ -75,9 +90,8 @@ class InterfaceAgent(Agent):
         message.add_receiver(AID(name=probabilistico_agent_name))
         message.set_content('Sugestão')
 
-        self.comport_request = CompRequest2(self, message)
+        self.comport_request = CompRequestInterface(self, message)
         self.comport_temp = ComportTemporal(self, 8.0, message)
-
         self.behaviours.append(self.comport_request)
         self.behaviours.append(self.comport_temp)
         
@@ -87,9 +101,19 @@ class InterfaceAgent(Agent):
         message.add_receiver(AID(name=historico_agent_name))
         message.set_content('Sugestão')
 
-        self.comport_request = CompRequest2(self, message)
+        self.comport_request = CompRequestInterface(self, message)
         self.comport_temp = ComportTemporal(self, 8.0, message)
+        self.behaviours.append(self.comport_request)
+        self.behaviours.append(self.comport_temp)
 
+        # message that requests suggestion to historico agent
+        message = ACLMessage(ACLMessage.REQUEST)
+        message.set_protocol(ACLMessage.FIPA_REQUEST_PROTOCOL)
+        message.add_receiver(AID(name=resultado_agent_name))
+        message.set_content('Resultado')
+
+        self.comport_request = CompRequestInterface(self, message)
+        self.comport_temp = ComportTemporal(self, 14.0, message)
         self.behaviours.append(self.comport_request)
         self.behaviours.append(self.comport_temp)
 
@@ -99,8 +123,7 @@ class TradicionalAgent(Agent):
     def __init__(self, aid):
         super(TradicionalAgent, self).__init__(aid=aid, debug=True)
         
-        self.comport_request = CompRequest(self)
-
+        self.comport_request = CompRequestAnalyticAgent(self)
         self.behaviours.append(self.comport_request)
 
 
@@ -109,8 +132,7 @@ class ProbabilisticoAgent(Agent):
     def __init__(self, aid):
         super(ProbabilisticoAgent, self).__init__(aid=aid, debug=False)
 
-        self.comport_request = CompRequest(self)
-
+        self.comport_request = CompRequestAnalyticAgent(self)
         self.behaviours.append(self.comport_request)
 
 
@@ -119,8 +141,16 @@ class HistoricoAgent(Agent):
     def __init__(self, aid):
         super(HistoricoAgent, self).__init__(aid=aid, debug=False)
 
-        self.comport_request = CompRequest(self)
+        self.comport_request = CompRequestAnalyticAgent(self)
+        self.behaviours.append(self.comport_request)
 
+
+class ResultadoAgent(Agent):
+    """Class thet defines the Resultado agent."""
+    def __init__(self, aid):
+        super(ResultadoAgent, self).__init__(aid=aid, debug=False)
+
+        self.comport_request = CompRequestResultAgent(self)
         self.behaviours.append(self.comport_request)
 
 
@@ -132,24 +162,24 @@ if __name__ == '__main__':
     for i in range(agents_per_process):
         port = int(argv[1]) + c
              
-        #tradicional_agent_name = 'agente_tradicional_{}@localhost:{}'.format(port - 9999, port - 9999)
         tradicional_agent_name = 'agente_tradicional'
         tradicional_agent = TradicionalAgent(AID(name=tradicional_agent_name))
         agents.append(tradicional_agent)
 
-        #probabilistico_agent_name = 'agente_probabilistico_{}@localhost:{}'.format(port - 9998, port - 9998)
         probabilistico_agent_name = 'agente_probabilistico'
         probabilistico_agent = ProbabilisticoAgent(AID(name=probabilistico_agent_name))
         agents.append(probabilistico_agent)
 
-        #historico_agent_name = 'agente_historico_{}@localhost:{}'.format(port - 9997, port - 9997)
         historico_agent_name = 'agente_historico'
         historico_agent = HistoricoAgent(AID(name=historico_agent_name))
         agents.append(historico_agent)
 
-        #interface_agent_name = 'interface_{}@localhost:{}'.format(port - 10000, port - 10000)
+        resultado_agent_name = 'agente_resultado'
+        resultado_agent = ResultadoAgent(AID(name=resultado_agent_name))
+        agents.append(resultado_agent)
+
         interface_agent_name = 'interface'
-        interface_agent = InterfaceAgent(AID(name=interface_agent_name), tradicional_agent_name, probabilistico_agent_name, historico_agent_name)
+        interface_agent = InterfaceAgent(AID(name=interface_agent_name), tradicional_agent_name, probabilistico_agent_name, historico_agent_name, resultado_agent)
         agents.append(interface_agent)
 
         c += 1
