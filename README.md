@@ -2,7 +2,7 @@
 <br>
 
 <p align="center">
-    <img src="https://github.com/jadypamella/unb-blackjack/docs/images/blackjack_logo.png" alt="blackjack" width="200">
+    <img src="https://github.com/jadypamella/unb-blackjack/blob/master/docs/images/blackjack_logo.png" alt="blackjack" width="200">
 </p>
 
 O objetivo do Sistema de Análise de Blackjack com Multiagentes é determinar qual a melhor estratégia para vencer no jogo Blackjack (21) ou seja, o melhor momento para a ação Hit (pedir mais uma carta) ou para a ação Stand (permanecer com a pontuação atual).
@@ -25,9 +25,9 @@ $ pade start-runtime --config_file pade_config.json
 ````
 
 Se tudo correr bem, a saída do terminal deve ser semelhante a essa:
-![Execução do PADE](https://github.com/jadypamella/unb-blackjack/docs/images/pade_console.png?raw=true)
+![Execução do PADE](https://github.com/jadypamella/unb-blackjack/blob/master/docs/images/pade_console.png?raw=true)
 Figura 1 - Console PADE
 
 5 - Acesse o endereço local da sua instalação do PADE (http://localhost:5000/diagrams) para visualizar o diagrama de comunicação entre os agentes, conforme exemplo abaixo:
-![Execução do PADE](https://github.com/jadypamella/unb-blackjack/docs/images/pade_message_diagram.png?raw=true)
+![Execução do PADE](https://github.com/jadypamella/unb-blackjack/blob/master/docs/images/pade_message_diagram.png?raw=true)
 Figura 2 - Diagrama de Comunicação entre os Agentes
