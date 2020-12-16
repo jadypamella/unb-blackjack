@@ -29,7 +29,7 @@ class CompRequestAnalyticAgent(FipaRequestProtocol):
 
     def handle_request(self, message):
         super(CompRequestAnalyticAgent, self).handle_request(message)
-        display_message(self.agent.aid.localname, 'suggestion message received from interface.')
+        display_message(self.agent.aid.localname, 'suggestion request message received from interface.')
 
         suggestion_list = ['Hit', 'Stand']
         suggestion = random.choice(suggestion_list)
@@ -48,7 +48,7 @@ class CompRequestResultAgent(FipaRequestProtocol):
 
     def handle_request(self, message):
         super(CompRequestResultAgent, self).handle_request(message)
-        display_message(self.agent.aid.localname, 'results analysis message received from interface.')
+        display_message(self.agent.aid.localname, 'results analysis request message received from interface.')
  
         result = "Análise de Resultados"
         reply = message.create_reply()
@@ -80,7 +80,7 @@ class InterfaceAgent(Agent):
         message.set_content('Sugestão')
 
         self.comport_request = CompRequestInterface(self, message)
-        self.comport_temp = ComportTemporal(self, 8.0, message)
+        self.comport_temp = ComportTemporal(self, 10.0, message)
         self.behaviours.append(self.comport_request)
         self.behaviours.append(self.comport_temp)
 
@@ -91,7 +91,7 @@ class InterfaceAgent(Agent):
         message.set_content('Sugestão')
 
         self.comport_request = CompRequestInterface(self, message)
-        self.comport_temp = ComportTemporal(self, 8.0, message)
+        self.comport_temp = ComportTemporal(self, 11.0, message)
         self.behaviours.append(self.comport_request)
         self.behaviours.append(self.comport_temp)
         
@@ -102,7 +102,7 @@ class InterfaceAgent(Agent):
         message.set_content('Sugestão')
 
         self.comport_request = CompRequestInterface(self, message)
-        self.comport_temp = ComportTemporal(self, 8.0, message)
+        self.comport_temp = ComportTemporal(self, 12.0, message)
         self.behaviours.append(self.comport_request)
         self.behaviours.append(self.comport_temp)
 
@@ -113,7 +113,7 @@ class InterfaceAgent(Agent):
         message.set_content('Resultado')
 
         self.comport_request = CompRequestInterface(self, message)
-        self.comport_temp = ComportTemporal(self, 14.0, message)
+        self.comport_temp = ComportTemporal(self, 13.0, message)
         self.behaviours.append(self.comport_request)
         self.behaviours.append(self.comport_temp)
 
